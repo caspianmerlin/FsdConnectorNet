@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FsdConnectorNet": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
