@@ -8,7 +8,7 @@ namespace FsdConnectorNet
     [StructLayout(LayoutKind.Sequential)]
     public struct PilotPosition
     {
-        private TransponderMode transponderMode;
+        private TransponderModeType transponderMode;
         private ushort squawkCode;
         private double latitude;
         private double longitude;

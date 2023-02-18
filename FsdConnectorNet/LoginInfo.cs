@@ -8,15 +8,17 @@ namespace FsdConnectorNet
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     public struct LoginInfo
     {
-        private string cid;
-        private string password;
-        private string callsign;
-        private string realName;
-        private PilotRating rating;
-        private string hostName;
-        private ushort port;
+        public string cid;
+        public string password;
+        public string callsign;
+        public string realName;
+        public PilotRatingType rating;
+        public string hostName;
+        public ushort port;
+        public ProtocolRevision protocolRevision;
+        public RadioFrequency radioFrequency;
     
-        public LoginInfo(string cid, string password, string callsign, string realName, PilotRating rating, string hostName, ushort port = 6809)
+        public LoginInfo(string cid, string password, string callsign, string realName, PilotRatingType rating, string hostName, ProtocolRevision protocolRevision, (ushort, ushort) radioFrequency, ushort port = 6809)
         {
             this.cid = cid;
             this.password = password;
@@ -25,6 +27,12 @@ namespace FsdConnectorNet
             this.rating = rating;
             this.hostName = hostName;
             this.port = port;
+            this.protocolRevision = protocolRevision;
+            this.radioFrequency = new RadioFrequency()
+            {
+                left = radioFrequency.Item1,
+                right = radioFrequency.Item2,
+            };
         }
     }
 }

@@ -5,7 +5,7 @@ namespace FsdConnectorNet
 {
 
     [StructLayout(LayoutKind.Sequential)]
-    struct RadioFrequency
+    public struct RadioFrequency
     {
         public ushort left;
         public ushort right;
@@ -18,6 +18,7 @@ namespace FsdConnectorNet
         public IntPtr stringB;
     }
 
+    [StructLayout(LayoutKind.Sequential)]
     struct FrequencyMessageFfi
     {
         public RadioFrequency freq;
