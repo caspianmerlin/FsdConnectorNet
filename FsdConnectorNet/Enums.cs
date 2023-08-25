@@ -1,6 +1,15 @@
 ﻿
 namespace FsdConnectorNet
 {
+
+    public enum FlightRules
+    {
+        DVFR,
+        SVFR,
+        VFR,
+        IFR,
+    }
+
     public enum PilotRatingType
     {
         Student = 1,
@@ -95,4 +104,17 @@ enum EventType
     InvalidCallsign,
     AlreadyRegistered,
     //String
+}
+
+public enum FlightPlanErrorType
+{
+    Unknown,
+    NotEnoughFields,
+    InvalidCallsign,
+    InvalidFlightRules,
+    InvalidAircraftType,
+    InvalidTrueAirspeed,
+    InvalidAirportCode,
+    InvalidTime,
+    InvalidCruiseLevel,
 }

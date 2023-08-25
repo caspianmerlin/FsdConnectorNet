@@ -43,6 +43,9 @@ namespace FsdConnectorNet
         [DllImport("fsd_connector_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern void send_frequency_message(IntPtr ptr, RadioFrequency frequency, [MarshalAs(UnmanagedType.LPStr)] string message);
 
+        [DllImport("fsd_connector_ffi", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void send_flight_plan(IntPtr ptr, FlightPlan flightPlan);
+
 
         private CancellationTokenSource _cts;
 
@@ -100,7 +103,11 @@ namespace FsdConnectorNet
             send_frequency_message(this._connectionHandle, freq, message);
         }
 
-
+        public void SendFlightPlanFromEsScenarioString(string scenarioString)
+        {
+            FlightPlan flightPlan = FlightPlan.ParseFromEsScenarioFile(scenarioString);
+            send_flight_plan(this._connectionHandle, flightPlan);
+        }
 
 
 
