@@ -103,9 +103,8 @@ namespace FsdConnectorNet
             send_frequency_message(this._connectionHandle, freq, message);
         }
 
-        public void SendFlightPlanFromEsScenarioString(string scenarioString)
+        public void SendFlightPlan(FlightPlan flightPlan)
         {
-            FlightPlan flightPlan = FlightPlan.ParseFromEsScenarioFile(scenarioString);
             send_flight_plan(this._connectionHandle, flightPlan);
         }
 
