@@ -103,9 +103,12 @@ namespace FsdConnectorNet
             send_frequency_message(this._connectionHandle, freq, message);
         }
 
-        public void SendFlightPlan(FlightPlan flightPlan)
+        public void SendFlightPlan(FlightPlan? flightPlan)
         {
-            send_flight_plan(this._connectionHandle, flightPlan);
+            if (flightPlan.HasValue)
+            {
+                send_flight_plan(this._connectionHandle, flightPlan.Value);
+            }
         }
 
 
