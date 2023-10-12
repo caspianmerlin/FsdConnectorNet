@@ -11,39 +11,39 @@ namespace FsdConnectorNet
 
         private IntPtr _connectionHandle;
 
-        [DllImport("fsd_connector_ffi", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr connection_new();
 
-        [DllImport("fsd_connector_ffi", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern void connection_connect(IntPtr ptr, ClientInfo clientInfo, LoginInfo loginInfo, PilotPosition aircraftPosition, AircraftConfig aircraftConfig, PlaneInfo planeInfo);
 
 
-        [DllImport("fsd_connector_ffi", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern void update_position(IntPtr ptr, PilotPosition position);
 
 
-        [DllImport("fsd_connector_ffi", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern bool is_connected(IntPtr ptr);
 
-        [DllImport("fsd_connector_ffi", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern void free_string(IntPtr ptr);
 
-        [DllImport("fsd_connector_ffi", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern TwoStringStruct get_two_string_struct(IntPtr ptr);
 
-        [DllImport("fsd_connector_ffi", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern FrequencyMessageFfi get_freq_msg_struct(IntPtr ptr);
 
-        [DllImport("fsd_connector_ffi", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern bool connection_free(IntPtr ptr);
 
-        [DllImport("fsd_connector_ffi", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr poll_events(IntPtr ptr, ref int eventType);
 
-        [DllImport("fsd_connector_ffi", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern void send_frequency_message(IntPtr ptr, RadioFrequency frequency, [MarshalAs(UnmanagedType.LPStr)] string message);
 
-        [DllImport("fsd_connector_ffi", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern void send_flight_plan(IntPtr ptr, FlightPlan flightPlan);
 
 
