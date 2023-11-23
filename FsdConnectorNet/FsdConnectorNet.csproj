@@ -17,12 +17,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CaspianMerlin.FsdConnector" Version="0.2.2">
+    <PackageReference Include="CaspianMerlin.FsdConnector" Version="0.2.3">
       <!-- See https://docs.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files#controlling-dependency-assets. -->
       <!-- We want to make NPM-Targets' .props and .targets files available to consumer projects, so we need to specify
            "build" here. We also need "contentFiles", because without it no "include" attribute is generated on the
            dependency in the .nuspec file. -->
-      <IncludeAssets>build;buildTransitive</IncludeAssets>
+      <IncludeAssets>build; buildtransitive</IncludeAssets>
       <!-- Nothing else works here to get "build" into the "include" attribute. -->
       <ExcludeAssets>none</ExcludeAssets>
       <!-- We specify "none" here to override the default value, which includes "build". -->
