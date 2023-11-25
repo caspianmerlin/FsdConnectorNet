@@ -5,6 +5,8 @@ using System.Text;
 
 namespace FsdConnectorNet
 {
+
+
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     public struct FlightPlan
     {
@@ -23,6 +25,28 @@ namespace FsdConnectorNet
         public string alternate;
         public string remarks;
         public string route;
+
+        public static FlightPlan FromFfiStruct(ref FlightPlanFfi ffi)
+        {
+            return new FlightPlan()
+            {
+                flightRules = ffi.flightRules,
+                aircraftType = Marshal.PtrToStringAnsi(ffi.aircraftType),
+                filedTas = ffi.filedTas,
+                origin = Marshal.PtrToStringAnsi(ffi.origin),
+                estimatedDepTime = ffi.estDepTime,
+                actualDepTime = ffi.actDepTime,
+                cruiseLevel = ffi.cruiseLevel,
+                destination = Marshal.PtrToStringAnsi(ffi.destination),
+                hoursEnroute = ffi.hoursEnroute,
+                minutesEnroute = ffi.minutesEnroute,
+                hoursFuel = ffi.hoursFuel,
+                minutesFuel = ffi.minutesFuel,
+                alternate = Marshal.PtrToStringAnsi(ffi.alternate),
+                remarks = Marshal.PtrToStringAnsi(ffi.remarks),
+                route = Marshal.PtrToStringAnsi(ffi.route),
+            };
+        }
 
         public static FlightPlan ParseFromEsScenarioFile(string fpString)
         {

@@ -46,6 +46,12 @@ namespace FsdConnectorNet
         [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern void send_flight_plan(IntPtr ptr, FlightPlan flightPlan);
 
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
+        private static extern FlightPlanMessageFfi get_flight_plan_message(IntPtr ptr);
+
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void free_flight_plan_message_struct(FlightPlanMessageFfi message);
+
 
         private CancellationTokenSource _cts;
 
@@ -57,9 +63,11 @@ namespace FsdConnectorNet
         public event EventHandler Connected;
         public event EventHandler Disconnected;
 
+        public FlightPlan? CurrentFlightPlan { get; private set; }
+
 
         public event EventHandler<FrequencyMessageEventArgs> FrequencyMessageReceived;
-        
+        public event EventHandler<PrivateMessageEventArgs> PrivateMessageReceived;
 
 
 
@@ -105,6 +113,7 @@ namespace FsdConnectorNet
 
         public void SendFlightPlan(FlightPlan? flightPlan)
         {
+            this.CurrentFlightPlan = flightPlan;
             if (flightPlan.HasValue)
             {
                 send_flight_plan(this._connectionHandle, flightPlan.Value);
@@ -183,11 +192,24 @@ namespace FsdConnectorNet
                         break;
                     case EventType.ServerHeartbeat:
                     case EventType.FlightPlanReceived:
+                        FlightPlanMessageFfi flightPlanMessageFfi = get_flight_plan_message(ptr);
+                        string callsign = Marshal.PtrToStringAnsi(flightPlanMessageFfi.callsign);
+                        FlightPlan flightPlan = FlightPlan.FromFfiStruct(ref flightPlanMessageFfi.flightPlan);
+                        free_flight_plan_message_struct(flightPlanMessageFfi);
+                        this.CurrentFlightPlan = flightPlan;
                         break;
                     case EventType.TextMessage:
                         TwoStringStruct tts2 = get_two_string_struct(ptr);
+                        string from_a= Marshal.PtrToStringAnsi(tts2.stringA);
+                        string message_a = Marshal.PtrToStringAnsi(tts2.stringB);
+                        PrivateMessageEventArgs privateMessageEventArgs = new PrivateMessageEventArgs()
+                        {
+                            From = from_a,
+                            Message = message_a,
+                        };
                         free_string(tts2.stringA);
                         free_string(tts2.stringB);
+                        PrivateMessageReceived?.Invoke(this, privateMessageEventArgs);
                         break;
                     case EventType.FrequencyMessage:
                         FrequencyMessageFfi freqMsg = get_freq_msg_struct(ptr);
@@ -199,7 +221,6 @@ namespace FsdConnectorNet
                             From = from,
                             Message = message,
                         };
-
                         free_string(freqMsg.from);
                         free_string(freqMsg.message);
                         FrequencyMessageReceived?.Invoke(this, freqMsgeventArgs);
