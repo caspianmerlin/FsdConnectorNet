@@ -52,6 +52,10 @@ namespace FsdConnectorNet
         [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern void free_flight_plan_message_struct(FlightPlanMessageFfi message);
 
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void send_private_message(IntPtr ptr, [MarshalAs(UnmanagedType.LPStr)] string recipient, [MarshalAs(UnmanagedType.LPStr)] string message);
+
+
 
         private CancellationTokenSource _cts;
 
@@ -109,6 +113,11 @@ namespace FsdConnectorNet
                 right = frequency.Item2,
             };
             send_frequency_message(this._connectionHandle, freq, message);
+        }
+
+        public void SendPrivateMessage(string to, string message)
+        {
+            send_private_message(this._connectionHandle, to, message);
         }
 
         public void SendFlightPlan(FlightPlan? flightPlan)
