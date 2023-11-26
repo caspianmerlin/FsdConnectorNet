@@ -47,6 +47,7 @@ namespace FsdConnectorNet
 
         [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern void send_flight_plan(IntPtr ptr, FlightPlan flightPlan);
+
         [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern void request_flight_plan(IntPtr ptr);
 
@@ -144,7 +145,7 @@ namespace FsdConnectorNet
 
             while (!token.IsCancellationRequested)
             {
-                if (this._stopwatch.ElapsedMilliseconds > 2000) {
+                if (this._stopwatch.ElapsedMilliseconds > 10000) {
                     request_flight_plan(this._connectionHandle);
                     this._stopwatch.Restart();
                 }
