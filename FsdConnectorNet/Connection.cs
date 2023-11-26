@@ -60,6 +60,7 @@ namespace FsdConnectorNet
         private CancellationTokenSource _cts;
 
         private bool disposedValue;
+        private LoginInfo? _loginInfo;
 
         // Event handlers
 
@@ -96,6 +97,7 @@ namespace FsdConnectorNet
         public void Connect(ClientInfo clientInfo, LoginInfo loginInfo, PilotPosition aircraftPosition, AircraftConfig aircraftConfig, PlaneInfo planeInfo)
         {
             if (IsConnected) { return; }
+            _loginInfo = loginInfo;
             connection_connect(this._connectionHandle, clientInfo, loginInfo, aircraftPosition, aircraftConfig, planeInfo);
             ThreadPool.QueueUserWorkItem(new WaitCallback(PollThread), _cts.Token);
         }
@@ -122,9 +124,9 @@ namespace FsdConnectorNet
 
         public void SendFlightPlan(FlightPlan? flightPlan)
         {
-            this.CurrentFlightPlan = flightPlan;
             if (flightPlan.HasValue)
             {
+                this.CurrentFlightPlan = flightPlan;
                 send_flight_plan(this._connectionHandle, flightPlan.Value);
             }
         }
@@ -200,12 +202,16 @@ namespace FsdConnectorNet
                         free_string(ptr);
                         break;
                     case EventType.ServerHeartbeat:
+                        break;
                     case EventType.FlightPlanReceived:
                         FlightPlanMessageFfi flightPlanMessageFfi = get_flight_plan_message(ptr);
                         string callsign = Marshal.PtrToStringAnsi(flightPlanMessageFfi.callsign);
                         FlightPlan flightPlan = FlightPlan.FromFfiStruct(ref flightPlanMessageFfi.flightPlan);
                         free_flight_plan_message_struct(flightPlanMessageFfi);
-                        this.CurrentFlightPlan = flightPlan;
+                        if (callsign == this._loginInfo?.callsign)
+                        {
+                            this.CurrentFlightPlan = flightPlan;
+                        }
                         break;
                     case EventType.TextMessage:
                         TwoStringStruct tts2 = get_two_string_struct(ptr);

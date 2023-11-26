@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace FsdConnectorNet
 {
@@ -10,21 +11,37 @@ namespace FsdConnectorNet
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     public struct FlightPlan
     {
+        [JsonInclude]
         public FlightRules flightRules;
+        [JsonInclude]
         public string aircraftType;
+        [JsonInclude]
         public ushort filedTas;
+        [JsonInclude]
         public string origin;
+        [JsonInclude]
         public ushort estimatedDepTime;
+        [JsonInclude]
         public ushort actualDepTime;
+        [JsonInclude]
         public uint cruiseLevel;
+        [JsonInclude]
         public string destination;
+        [JsonInclude]
         public byte hoursEnroute;
+        [JsonInclude]
         public byte minutesEnroute;
+        [JsonInclude]
         public byte hoursFuel;
+        [JsonInclude]
         public byte minutesFuel;
+        [JsonInclude]
         public string alternate;
+        [JsonInclude]
         public string remarks;
+        [JsonInclude]
         public string route;
+
 
         public static FlightPlan FromFfiStruct(ref FlightPlanFfi ffi)
         {
