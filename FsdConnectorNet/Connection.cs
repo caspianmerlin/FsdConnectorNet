@@ -1,5 +1,6 @@
 ﻿using FsdConnectorNet.Args;
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 
@@ -10,6 +11,7 @@ namespace FsdConnectorNet
         // FFI stuff
 
         private IntPtr _connectionHandle;
+        private Stopwatch _stopwatch;
 
         [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr connection_new();
@@ -45,6 +47,8 @@ namespace FsdConnectorNet
 
         [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern void send_flight_plan(IntPtr ptr, FlightPlan flightPlan);
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void request_flight_plan(IntPtr ptr);
 
         [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern FlightPlanMessageFfi get_flight_plan_message(IntPtr ptr);
@@ -92,6 +96,7 @@ namespace FsdConnectorNet
         {
             _cts = new CancellationTokenSource();
             this._connectionHandle= connection_new();
+            this._stopwatch = Stopwatch.StartNew();
         }
 
         public void Connect(ClientInfo clientInfo, LoginInfo loginInfo, PilotPosition aircraftPosition, AircraftConfig aircraftConfig, PlaneInfo planeInfo)
@@ -137,8 +142,12 @@ namespace FsdConnectorNet
         {
             CancellationToken token = (CancellationToken)obj;
 
-            while(!token.IsCancellationRequested)
+            while (!token.IsCancellationRequested)
             {
+                if (this._stopwatch.ElapsedMilliseconds > 2000) {
+                    request_flight_plan(this._connectionHandle);
+                    this._stopwatch.Restart();
+                }
                 bool shouldDisconnect = false;
                 int eventInt = 0;
                 IntPtr ptr = poll_events(this._connectionHandle, ref eventInt);
