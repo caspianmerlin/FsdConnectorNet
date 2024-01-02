@@ -59,6 +59,14 @@ namespace FsdConnectorNet
 
         [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern void send_private_message(IntPtr ptr, [MarshalAs(UnmanagedType.LPStr)] string recipient, [MarshalAs(UnmanagedType.LPStr)] string message);
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void set_gear_down(IntPtr ptr, bool gearDown);
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void set_flaps_pct(IntPtr ptr, int flapsPct);
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void set_spoilers_out(IntPtr ptr, bool spoilersOut);
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void set_on_ground(IntPtr ptr, bool onGround);
 
 
 
@@ -122,6 +130,26 @@ namespace FsdConnectorNet
             };
             send_frequency_message(this._connectionHandle, freq, message);
         }
+
+        public void SetGearDown(bool gearDown)
+        {
+            set_gear_down(this._connectionHandle, gearDown);
+        }
+
+        public void SetFlapsPct(int flapsPct)
+        {
+            set_flaps_pct(this._connectionHandle, flapsPct);
+        }
+
+        public void SetSpoilersDeployed(bool spoilersDeployed)
+        {
+            set_spoilers_out(this._connectionHandle, spoilersDeployed);
+        }
+        public void SetOnGround(bool onGround)
+        {
+            set_on_ground(this._connectionHandle, onGround);
+        }
+
 
         public void SendPrivateMessage(string to, string message)
         {
