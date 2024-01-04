@@ -60,13 +60,31 @@ namespace FsdConnectorNet
         [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern void send_private_message(IntPtr ptr, [MarshalAs(UnmanagedType.LPStr)] string recipient, [MarshalAs(UnmanagedType.LPStr)] string message);
         [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void set_gear_down(IntPtr ptr, bool gearDown);
+        private static extern void set_gear_down(IntPtr ptr, int gearDown);
         [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern void set_flaps_pct(IntPtr ptr, int flapsPct);
         [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void set_spoilers_out(IntPtr ptr, bool spoilersOut);
+        private static extern void set_spoilers_out(IntPtr ptr, int spoilersOut);
         [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void set_on_ground(IntPtr ptr, bool onGround);
+        private static extern void set_on_ground(IntPtr ptr, int onGround);
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void set_landing_lights(IntPtr ptr, int on);
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void set_strobe_light(IntPtr ptr, int on);
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void set_taxi_lights(IntPtr ptr, int on);
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void set_beacon_light(IntPtr ptr, int on);
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void set_nav_lights(IntPtr ptr, int on);
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void set_logo_lights(IntPtr ptr, int on);
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void set_engines_on(IntPtr ptr, int on);
+        [DllImport("pilot_client_ffi", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void set_engines_reversing(IntPtr ptr, int on);
+
+
 
 
 
@@ -133,7 +151,8 @@ namespace FsdConnectorNet
 
         public void SetGearDown(bool gearDown)
         {
-            set_gear_down(this._connectionHandle, gearDown);
+            int flag = gearDown ? 1 : 0;
+            set_gear_down(this._connectionHandle, flag);
         }
 
         public void SetFlapsPct(int flapsPct)
@@ -143,13 +162,54 @@ namespace FsdConnectorNet
 
         public void SetSpoilersDeployed(bool spoilersDeployed)
         {
-            set_spoilers_out(this._connectionHandle, spoilersDeployed);
+            int flag = spoilersDeployed ? 1 : 0;
+            set_spoilers_out(this._connectionHandle, flag);
         }
         public void SetOnGround(bool onGround)
         {
-            set_on_ground(this._connectionHandle, onGround);
+            int flag = onGround ? 1 : 0;
+            set_on_ground(this._connectionHandle, flag);
         }
-
+        public void SetLandingLights(bool on)
+        {
+            int flag = on ? 1 : 0;
+            set_landing_lights(this._connectionHandle, flag);
+        }
+        public void SetStrobeLight(bool on)
+        {
+            int flag = on ? 1 : 0;
+            set_strobe_light(this._connectionHandle, flag);
+        }
+        public void SetTaxiLights(bool on)
+        {
+            int flag = on ? 1 : 0;
+            set_taxi_lights(this._connectionHandle, flag);
+        }
+        public void SetBeaconLight(bool on)
+        {
+            int flag = on ? 1 : 0;
+            set_beacon_light(this._connectionHandle, flag);
+        }
+        public void SetNavLights(bool on)
+        {
+            int flag = on ? 1 : 0;
+            set_nav_lights(this._connectionHandle, flag);
+        }
+        public void SetLogoLight(bool on)
+        {
+            int flag = on ? 1 : 0;
+            set_logo_lights(this._connectionHandle, flag);
+        }
+        public void SetEnginesOn(bool on)
+        {
+            int flag = on ? 1 : 0;
+            set_engines_on(this._connectionHandle, flag);
+        }
+        public void SetEnginesReversing(bool on)
+        {
+            int flag = on ? 1 : 0;
+            set_engines_reversing(this._connectionHandle, flag);
+        }
 
         public void SendPrivateMessage(string to, string message)
         {
